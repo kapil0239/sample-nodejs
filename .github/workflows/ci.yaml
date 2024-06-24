@@ -28,9 +28,10 @@ jobs:
 
     - name: Install Notation
       run: |
-        curl -Lo notation.tar.gz https://github.com/notaryproject/notation/releases/download/v0.10.0/notation-linux-amd64.tar.gz
-        tar -xzf notation.tar.gz
-        sudo mv notation /usr/local/bin/
+        curl -Lo notation.zip https://github.com/notaryproject/notation/releases/download/v0.10.0/notation_0.10.0_linux_amd64.zip
+        sudo apt-get install unzip -y
+        unzip notation.zip -d notation
+        sudo mv notation/notation /usr/local/bin/
 
     - name: Import GPG Key
       run: |
