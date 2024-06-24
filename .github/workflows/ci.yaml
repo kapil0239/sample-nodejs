@@ -47,8 +47,8 @@ jobs:
     - name: Set up Notation
       run: |
         mkdir -p ~/.config/notation
-        echo "${{ secrets.GPG_PASSPHRASE }}" | notation key import mykey --file <(echo "${{ secrets.GPG_PRIVATE_KEY }}")
-        echo "${{ secrets.GPG_PASSPHRASE }}" 
+        echo "${{ secrets.GPG_PASSPHRASE }}" | notation key import mykey <(echo "${{ secrets.GPG_PRIVATE_KEY }}")
+        echo "${{ secrets.GPG_PASSPHRASE }}" | notation key passphrase mykey --passphrase-stdin
 
     - name: Sign Docker image
       run: |
