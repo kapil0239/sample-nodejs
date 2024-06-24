@@ -39,10 +39,15 @@ jobs:
       env:
         GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 
+    # - name: Set up Notation
+    #   run: |
+    #     notation key import --name sample --type=pgp <(echo "${{ secrets.GPG_PRIVATE_KEY }}")
+    #     notation key passphrase --name sample --passphrase-stdin <<< "${{ secrets.GPG_PASSPHRASE }}"
+
     - name: Set up Notation
       run: |
-        notation key import --name sample --type=pgp <(echo "${{ secrets.GPG_PRIVATE_KEY }}")
-        notation key passphrase --name sample --passphrase-stdin <<< "${{ secrets.GPG_PASSPHRASE }}"
+        mkdir -p ~/.config/notation
+        echo "${{ secrets.GPG_PASSPHRASE }}" | notation key import --name mykey --type=pgp <(echo "${{ secrets.GPG_PRIVATE_KEY }}")
 
     - name: Sign Docker image
       run: |
