@@ -50,6 +50,10 @@ jobs:
         echo "${{ secrets.GPG_PASSPHRASE }}" | notation key import mykey <(echo "${{ secrets.GPG_PRIVATE_KEY }}")
         echo "${{ secrets.GPG_PASSPHRASE }}" | notation key passphrase mykey
 
+    - name: List Notation Keys
+      run: |
+            notation key list
+
     - name: Sign Docker image
       run: |
         notation sign --key mykey kapil0239/nodejs:latest
