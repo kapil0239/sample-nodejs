@@ -1,0 +1,54 @@
+name: Build and Sign Docker Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-sign:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    # - name: Log in to Docker Hub
+    #   uses: docker/login-action@v2
+    #   with:
+    #     username: ${{ secrets.DOCKER_USERNAME }}
+    #     password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build Docker image
+      run: |
+        docker buildx build --platform linux/amd64,linux/arm64 -t your-docker-username/your-image-name:latest --push .
+
+    - name: Install Notation
+      run: |
+        curl -Lo notation.tar.gz https://github.com/notaryproject/notation/releases/download/v0.10.0/notation-linux-amd64.tar.gz
+        tar -xzf notation.tar.gz
+        sudo mv notation /usr/local/bin/
+
+    - name: Import GPG Key
+      run: |
+        echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import -
+      env:
+        GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+
+    - name: Set up Notation
+      run: |
+        notation key import --name your-key-name --type=pgp <(echo "${{ secrets.GPG_PRIVATE_KEY }}")
+        notation key passphrase --name your-key-name --passphrase-stdin <<< "${{ secrets.GPG_PASSPHRASE }}"
+
+    - name: Sign Docker image
+      run: |
+        notation sign --key your-key-name your-docker-username/your-image-name:latest
+      env:
+        GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
+    - name: Verify Docker image signature
+      run: |
+        notation verify your-docker-username/your-image-name:latest
