@@ -41,8 +41,8 @@ jobs:
 
     - name: Set up Notation
       run: |
-        notation key import --name your-key-name --type=pgp <(echo "${{ secrets.GPG_PRIVATE_KEY }}")
-        notation key passphrase --name your-key-name --passphrase-stdin <<< "${{ secrets.GPG_PASSPHRASE }}"
+        notation key import --name sample --type=pgp <(echo "${{ secrets.GPG_PRIVATE_KEY }}")
+        notation key passphrase --name sample --passphrase-stdin <<< "${{ secrets.GPG_PASSPHRASE }}"
 
     - name: Sign Docker image
       run: |
