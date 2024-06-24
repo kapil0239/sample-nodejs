@@ -52,7 +52,7 @@ jobs:
 
     - name: Sign Docker image
       run: |
-        notation sign --key signing-key kapil0239/nodejs:latest
+        notation sign --key mykey kapil0239/nodejs:latest
       env:
         GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
