@@ -3,7 +3,7 @@ name: Build and Sign Docker Image
 on:
   push:
     branches:
-      - mai
+      - main
 
 jobs:
   build-and-sign:
