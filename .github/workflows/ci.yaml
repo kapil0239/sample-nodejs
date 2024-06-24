@@ -3,7 +3,7 @@ name: Build and Sign Docker Image
 on:
   push:
     branches:
-      - main
+      - mai
 
 jobs:
   build-and-sign:
@@ -24,7 +24,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker buildx build --platform linux/amd64,linux/arm64 -t your-docker-username/your-image-name:latest --push .
+        docker buildx build --platform linux/amd64,linux/arm64 -t kapil0239/nodejs:latest --push .
 
     - name: Install Notation
       run: |
@@ -45,10 +45,10 @@ jobs:
 
     - name: Sign Docker image
       run: |
-        notation sign --key your-key-name your-docker-username/your-image-name:latest
+        notation sign --key signing-key kapil0239/nodejs:latest
       env:
         GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
     - name: Verify Docker image signature
       run: |
-        notation verify your-docker-username/your-image-name:latest
+        notation verify kapil0239/nodejs:latest
